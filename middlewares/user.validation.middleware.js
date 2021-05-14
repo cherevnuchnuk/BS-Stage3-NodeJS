@@ -15,15 +15,15 @@ const Validator = require('../validators/Validator')
 //     password: '' // min 3 symbols
 const createUserValid = (req, res, next) => {
     let errors = {}
-    const {firstName, lastName, email, phoneNumber, password} = req.body
+    const {firstName, lastName, email, phoneNumber, password, ...rest} = req.body
     if (req.body.id) {
         errors["id"] = "Id should not be passed into creation"
     }
-    if (!Validator.onlyMandatoryAttributes(req.body, 5)) {
-        errors["attributes"] = "Passed to much attributes"
+    if (!Validator.onlyMandatoryAttributes(rest, 0)) {
+        errors["attributes"] = "Passed too much attributes"
     }
     if (Validator.isEmptyVal(firstName)) {
-        errors["firstName"] = "First name should not be  empty"
+        errors["firstName"] = "First name should not be empty"
     }
     if (Validator.isEmptyVal(lastName)) {
         errors["lastName"] = "Last Name should not be empty"
@@ -53,18 +53,28 @@ const createUserValid = (req, res, next) => {
         req.user = {
             firstName, lastName, email, phoneNumber, password
         }
+        for (const key in req.user) {
+            if (req.user[key]) {
+                req.user[key] = req.user[key].toLowerCase();
+            }
+        }
     }
+
     next();
 }
 
 const updateUserValid = (req, res, next) => {
     let errors = {}
-    const {firstName, lastName, email, phoneNumber, password} = req.body
+    const {firstName, lastName, email, phoneNumber, password, ...rest} = req.body
     if (req.body.id) {
         errors["id"] = "Id should not be passed into update"
     }
-    if (!Validator.onlyMandatoryAttributes(req.body, 5)) {
-        errors["attributes"] = "Passed to much attributes"
+    if (!Validator.onlyMandatoryAttributes(rest, 0)) {
+        errors["attributes"] = "Passed too much attributes"
+    }
+
+    if (!Validator.onlyMandatoryAttributes(req.body, 0)) {
+        errors["attributes"] = "Passed no attributes"
     }
 
     if (email && !Validator.isGmail(email)) {
@@ -84,6 +94,12 @@ const updateUserValid = (req, res, next) => {
     } else {
         req.user = {
             firstName, lastName, email, phoneNumber, password
+        }
+        for (const key in req.user) {
+            if (req.user[key]) {
+                req.user[key] = req.user[key].toLowerCase();
+            }
+
         }
     }
     next();

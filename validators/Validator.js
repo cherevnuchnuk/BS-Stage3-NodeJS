@@ -1,7 +1,8 @@
 class Validator {
 
     isNumber(val) {
-        return Number.isFinite(val)
+        let number_val = Number(val)
+        return !isNaN(number_val) && Number.isFinite(number_val)
     }
 
     isEmptyVal(val) {
@@ -23,8 +24,9 @@ class Validator {
         }
         return false
     }
-    onlyMandatoryAttributes(object, amount){
-        return Object.keys(object).length === amount
+
+    onlyMandatoryAttributes(object, amount) {
+        return Object.keys(object).length > amount
     }
 }
 

@@ -42,7 +42,7 @@ class UserService {
     }
 
     delete(id) {
-        const user = UserRepository.delete(id)
+        const user = UserRepository.delete({id})
         if (!user) {
             throw Error("User not found")
         }

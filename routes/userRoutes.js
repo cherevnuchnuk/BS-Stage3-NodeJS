@@ -18,8 +18,8 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
     try {
-        const userId = req.params.id
-        res.data = UserService.findOne({id: userId})
+        const id = req.params.id
+        res.data = UserService.findOne(id)
         if (res.data) {
             res.status(200)
         }
@@ -36,11 +36,8 @@ router.post('/', createUserValid, (req, res, next) => {
         // middleware should return user if no errors exist
         const user = req.user
         if (user) {
-            for (const key in user) {
-                user[key] = user[key].toLowerCase();
-            }
             res.data = UserService.create(user)
-            res.status(200)
+            res.status(201)
         }
         // else there is problem with arguments
         else {
@@ -58,9 +55,6 @@ router.put('/:id', updateUserValid, (req, res, next) => {
         // middleware should return user if no errors exist
         const user = req.user
         if (user) {
-            for (const key in user) {
-                user[key] = user[key].toLowerCase();
-            }
             const id = req.params.id
             res.data = UserService.update(id, user)
             res.status(200)

@@ -1,5 +1,5 @@
-const { dbAdapter } = require('../config/db');
-const { v4 } = require('uuid');
+const {dbAdapter} = require('../config/db');
+const {v4} = require('uuid');
 
 
 class BaseRepository {
@@ -29,11 +29,11 @@ class BaseRepository {
 
     update(id, dataToUpdate) {
         dataToUpdate.updatedAt = new Date();
-        return this.dbContext.find({ id }).assign(dataToUpdate).write();
+        return this.dbContext.find({id}).assign(dataToUpdate).write();
     }
 
     delete(id) {
-        return this.dbContext.remove({ id }).write();
+        return this.dbContext.remove({id}).write();
     }
 }
 
