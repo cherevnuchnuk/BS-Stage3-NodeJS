@@ -1,15 +1,16 @@
-const responseMiddleware = (req, res, next) => {
-    console.log("Response middleware")
+const responseMiddleware = (req, res) => {
     console.log("body:", req.body, "; params:", req.params)
+    console.log("body:", res.body, "; err:", res.err)
     if (res.err) {
-        res.error = true
-        res.message = res.err
+        res.json({
+            error: true,
+            message: res.err.message
+        })
     }
     else {
         res.status(200)
     }
     res.send()
-    next();
 }
 
 exports.responseMiddleware = responseMiddleware;
