@@ -23,6 +23,9 @@ class Validator {
         }
         return false
     }
+    onlyMandatoryAttributes(object, amount){
+        return Object.keys(object).length === amount
+    }
 }
 
 module.exports = new Validator();

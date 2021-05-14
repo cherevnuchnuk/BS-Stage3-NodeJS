@@ -16,6 +16,12 @@ const Validator = require('../validators/Validator')
 const createUserValid = (req, res, next) => {
     let errors = {}
     const {firstName, lastName, email, phoneNumber, password} = req.body
+    if (req.body.id) {
+        errors["id"] = "Id should not be passed into creation"
+    }
+    if (!Validator.onlyMandatoryAttributes(req.body, 5)) {
+        errors["attributes"] = "Passed to much attributes"
+    }
     if (Validator.isEmptyVal(firstName)) {
         errors["firstName"] = "First name should not be  empty"
     }
@@ -25,37 +31,61 @@ const createUserValid = (req, res, next) => {
 
     if (Validator.isEmptyVal(email)) {
         errors["email"] = "Email should not be empty"
-    }
-    else if (!Validator.isGmail(email)){
+    } else if (!Validator.isGmail(email)) {
         errors["email"] = "Email should be in correct format"
     }
 
     if (Validator.isEmptyVal(phoneNumber)) {
         errors["phoneNumber"] = "Phone number should not be empty"
-    }
-    else if (!Validator.isPhoneNumber(phoneNumber)){
+    } else if (!Validator.isPhoneNumber(phoneNumber)) {
         errors["phoneNumber"] = "Phone number should be in correct format +380..."
     }
 
     if (Validator.isEmptyVal(password)) {
         errors["password"] = "Password should not be empty"
-    }
-    else if (!Validator.isInBounds(password.length, 3, 200)){
+    } else if (!Validator.isInBounds(password.length, 3, 200)) {
         errors["password"] = "Password should have at least 3 symbols"
     }
 
     if (Object.keys(errors).length > 0) {
         res.err = errors
-    }
-    else {
-        req.user = {firstName, lastName, email, phoneNumber, password}
+    } else {
+        req.user = {
+            firstName, lastName, email, phoneNumber, password
+        }
     }
     next();
 }
 
 const updateUserValid = (req, res, next) => {
-    // TODO: Implement validatior for user entity during update
+    let errors = {}
+    const {firstName, lastName, email, phoneNumber, password} = req.body
+    if (req.body.id) {
+        errors["id"] = "Id should not be passed into update"
+    }
+    if (!Validator.onlyMandatoryAttributes(req.body, 5)) {
+        errors["attributes"] = "Passed to much attributes"
+    }
 
+    if (email && !Validator.isGmail(email)) {
+        errors["email"] = "Email should be in correct format"
+    }
+
+    if (phoneNumber && !Validator.isPhoneNumber(phoneNumber)) {
+        errors["phoneNumber"] = "Phone number should be in correct format +380..."
+    }
+
+    if (password && !Validator.isInBounds(password.length, 3, 200)) {
+        errors["password"] = "Password should have at least 3 symbols"
+    }
+
+    if (Object.keys(errors).length > 0) {
+        res.err = errors
+    } else {
+        req.user = {
+            firstName, lastName, email, phoneNumber, password
+        }
+    }
     next();
 }
 

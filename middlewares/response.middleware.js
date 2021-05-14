@@ -7,9 +7,7 @@ const responseMiddleware = (req, res) => {
             message: res.err.message
         })
     }
-    else {
-        res.status(200)
-    }
+
     res.send()
 }
 
